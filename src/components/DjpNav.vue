@@ -18,87 +18,84 @@
 </template>
 
 <script>
-'use strict'
+  'use strict'
 
-import {
-  Row,
-  Col,
-  Form,
-  FormItem,
-  DatePicker,
-  Button
-  // Message
-} from 'element-ui'
+  import {
+    Row,
+    Col,
+    Form,
+    FormItem,
+    DatePicker,
+    Button,
+    Message
+  } from 'element-ui'
 
-import { DEFAULT_USER } from '@/store'
-import moment from 'moment'
+  import { DEFAULT_USER } from '@/store'
 
-export default {
-  name: 'djpNav',
-  data () {
-    return {
-      pickerOptions: {
-        shortcuts: [{
-          text: '昨天',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '今天',
-          onClick (picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '明天',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() + 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '清空',
-          onClick (picker) {
-            picker.$emit('pick', '')
-          }
-        }]
+  export default {
+    name: 'djpNav',
+    data () {
+      return {
+        pickerOptions: {
+          shortcuts: [{
+            text: '昨天',
+            onClick (picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          }, {
+            text: '今天',
+            onClick (picker) {
+              picker.$emit('pick', new Date())
+            }
+          }, {
+            text: '明天',
+            onClick (picker) {
+              const date = new Date()
+              date.setTime(date.getTime() + 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          }, {
+            text: '清空',
+            onClick (picker) {
+              picker.$emit('pick', '')
+            }
+          }]
+        },
+        searchDate: ''
+      }
+    },
+    methods: {
+      onSubmit () {
+        if (this.searchDate) {
+          this.$store.dispatch('getList', {
+            auth: this.$store.state.user.auth,
+            searchDate: this.searchDate
+          }).catch(error => {
+            Message.error({
+              showClose: true,
+              message: (error.response && error.response.data) || '服务器错误'
+            })
+          })
+        }
       },
-      searchDate: ''
-    }
-  },
-  methods: {
-    onSubmit () {
-      if (this.searchDate) {
-        this.$http({
-          url: '/djps',
-          headers: {'Authorization': `Bearer ${this.$store.state.user.auth}`},
-          params: {
-            smDate: moment(this.searchDate).format('YYYY-MM-DD')
-          }
-        }).then(response => {
-          this.$store.commit('SET_LIST', response.data)
-        }).catch(error => {
-          console.log(error)
+      onLogout () {
+        this.$store.dispatch('setUser', DEFAULT_USER)
+        this.$store.dispatch('setList', [])
+        this.$router.replace({
+          name: 'Login',
+          query: { redirect: this.$route.fullPath }
         })
       }
     },
-    onLogout () {
-      this.$store.commit('SET_USER', DEFAULT_USER)
-      this.$store.commit('SET_LIST', [])
-      this.$router.replace({
-        name: 'Login',
-        query: { redirect: this.$route.fullPath }
-      })
+    components: {
+      elRow: Row,
+      elCol: Col,
+      elForm: Form,
+      elFormItem: FormItem,
+      elDatePicker: DatePicker,
+      elButton: Button
     }
-  },
-  components: {
-    elRow: Row,
-    elCol: Col,
-    elForm: Form,
-    elFormItem: FormItem,
-    elDatePicker: DatePicker,
-    elButton: Button
   }
-}
 </script>

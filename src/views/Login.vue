@@ -13,9 +13,7 @@
 
           <el-form-item label="城市" prop="dbName">
             <el-select v-model="loginForm.dbName" placeholder="请选择城市">
-              <el-option label="深圳" value="sz"></el-option>
-              <el-option label="广州" value="gz"></el-option>
-              <el-option label="杭州" value="hz"></el-option>
+              <el-option v-for="(value, key) in citydb" :label="key" :value="value" :key="key"></el-option>
             </el-select>
           </el-form-item>
 
@@ -28,7 +26,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click.native.prevent="submitForm">提交</el-button>
+            <el-button type="primary" native-type="submit" @click.native.prevent="submitForm">提交</el-button>
             <el-button @click.native.prevent="resetForm">重置</el-button>
           </el-form-item>
         </el-form>
@@ -48,7 +46,8 @@
     Select,
     Option,
     Input,
-    Button
+    Button,
+    Message
   } from 'element-ui'
 
   export default {
@@ -111,6 +110,26 @@
         }
       }
     },
+    computed: {
+      citydb () {
+        return this.$store.state.citydb
+      }
+    },
+    beforeCreate () {
+      if (Object.keys(this.$store.state.citydb).length === 0) {
+        this.$store.dispatch('citydb').catch(() => {
+          // let msg
+          // if (error.response && error.response.data) {
+          //   msg = this.$store.state.err[error.response.data]
+          // }
+
+          Message.error({
+            showClose: true,
+            message: '服务器错误'
+          })
+        })
+      }
+    },
     methods: {
       submitForm () {
         this.$refs.loginForm.validate((valid) => {
@@ -120,24 +139,14 @@
               name: this.loginForm.name,
               password: this.loginForm.password
             }
-            const userStr = JSON.stringify(userObj)
-            const user = Buffer.from(userStr).toString('base64')
 
-            this.$http({
-              method: 'post',
-              url: '/users/login',
-              data: { user }
-            }).then(response => {
-              // success callback
-              this.$store.commit('SET_USER', {
-                dbName: this.loginForm.dbName,
-                name: this.loginForm.name,
-                auth: response.data
-              })
-
+            this.$store.dispatch('login', userObj).then(() => {
               this.$router.replace(this.$route.query.redirect || '/')
             }).catch(error => {
-              console.log(error)
+              Message.error({
+                showClose: true,
+                message: (error.response && error.response.data) || '服务器错误'
+              })
             })
           }
         })

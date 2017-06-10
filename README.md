@@ -28,3 +28,5 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+scp root@120.76.232.12:/root/nginx/web/djp/static/docx/djpTable.docx static/docx

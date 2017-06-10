@@ -6,16 +6,16 @@
 </template>
 
 <script>
-'use strict'
+  'use strict'
 
-import DjpNav from '@/components/DjpNav'
-import DjpTable from '@/components/DjpTable'
+  import DjpNav from '@/components/DjpNav'
+  import DjpTable from '@/components/DjpTable'
 
-export default {
-  name: 'home',
-  components: {
-    DjpNav,
-    DjpTable
+  export default {
+    name: 'home',
+    components: {
+      DjpNav,
+      DjpTable
+    }
   }
-}
 </script>

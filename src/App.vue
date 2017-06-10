@@ -1,14 +1,25 @@
 <template>
   <div id="app">
-    <!--<img src="./assets/logo.png">-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  'use strict'
+
+  // import { Message } from 'element-ui'
+
+  export default {
+    name: 'app'
+    // beforeCreate () {
+    //   this.$store.dispatch('setErr').catch(() => {
+    //     Message.error({
+    //       showClose: true,
+    //       message: '服务器错误'
+    //     })
+    //   })
+    // }
+  }
 </script>
 
 <style scoped>

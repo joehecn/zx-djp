@@ -3,11 +3,13 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import mutations from './mutations.js'
+import actions from './actions.js'
 import plugins from './plugins.js'
 
 Vue.use(Vuex)
 
-export const LOCAL_KEY = 'user'
+export const LOCAL_KEY = 'user' // Local Storage Key
 
 export const DEFAULT_USER = {
   dbName: '',
@@ -17,20 +19,14 @@ export const DEFAULT_USER = {
 
 const store = new Vuex.Store({
   state: {
+    // err: {},
+    citydb: {}, // { '深圳': 'sz', '广州': 'gz', '杭州': 'hz' },
     user: JSON.parse(window.localStorage.getItem(LOCAL_KEY)) || DEFAULT_USER,
-    list: []
+    list: [],
+    changedIndex: -1
   },
-  mutations: {
-    SET_USER: (state, user) => {
-      state.user = user
-    },
-    SET_LIST: (state, list) => {
-      state.list = list
-    },
-    SET_ITEM: (state, { index, item }) => {
-      Vue.set(state.list, index, item)
-    }
-  },
+  mutations,
+  actions,
   plugins
 })
 
