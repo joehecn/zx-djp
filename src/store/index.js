@@ -18,6 +18,7 @@ export const DEFAULT_USER = {
 }
 
 const store = new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     // err: {},
     citydb: {}, // { '深圳': 'sz', '广州': 'gz', '杭州': 'hz' },
