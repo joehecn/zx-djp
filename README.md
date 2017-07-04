@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/badges/github.com/joehecn/zx-djp.svg)](https://gemnasium.com/github.com/joehecn/zx-djp)
+
 # zx-djp
 
 > A Vue.js project
